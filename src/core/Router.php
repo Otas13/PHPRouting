@@ -48,7 +48,7 @@ class Router
             $request_method = strtolower($request->getMethod());
             # cesta v route
             $route_path = explode('/', $route->getControllerPath());
-
+            $success = false;
 
             if($route_method != $request_method){
                 continue;
@@ -111,11 +111,16 @@ class Router
                 $controller = new $controller_path;
 
                 if(is_callable(array($controller, $route->getAction()))){
+                        $success = true;
                         call_user_func_array(array($controller, $route->getAction()), $usr_params);
                 }
 
                 # controller s akci byl zavolan...
             }
+        }
+        #   konec hledaciho cyklu
+        if(!$success){
+            echo('<h2>Stranka nenalezena</h2>');
         }
     }
 }
